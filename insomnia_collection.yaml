@@ -1,0 +1,313 @@
+_type: export
+__export_format: 4
+__export_date: 2025-12-18T22:41:00.000Z
+__export_source: insomnia.desktop
+resources:
+  # ==================== WORKSPACE ====================
+  - _id: wrk_seguro_carros
+    _type: workspace
+    name: Seguro de Carros API
+    description: API completa para gerenciamento de seguros de veículos
+
+  # ==================== ENVIRONMENTS ====================
+  - _id: env_base
+    _type: environment
+    parentId: wrk_seguro_carros
+    name: Base Environment
+    data:
+      base_url: http://localhost:3000
+      token: ''
+
+  # ==================== FOLDERS ====================
+  - _id: fld_auth
+    _type: request_group
+    parentId: wrk_seguro_carros
+    name: '🔐 Autenticação'
+    description: 'Endpoints de autenticação (cadastro e login)'
+
+  - _id: fld_cliente
+    _type: request_group
+    parentId: wrk_seguro_carros
+    name: '👤 Cliente'
+    description: 'CRUD de clientes (requer autenticação)'
+
+  - _id: fld_veiculo
+    _type: request_group
+    parentId: wrk_seguro_carros
+    name: '🚗 Veículo'
+    description: 'CRUD de veículos (requer autenticação)'
+
+  - _id: fld_apolice
+    _type: request_group
+    parentId: wrk_seguro_carros
+    name: '📄 Apólice'
+    description: 'CRUD de apólices (requer autenticação)'
+
+  # ==================== AUTENTICAÇÃO - POST ====================
+  - _id: req_cadastrar
+    _type: request
+    parentId: fld_auth
+    name: 'POST - Cadastrar Cliente'
+    method: POST
+    url: '{{ _.base_url }}/clientes/cadastrar'
+    headers:
+      - name: Content-Type
+        value: application/json
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "João Silva",
+          "email": "joao.silva@email.com",
+          "senha": "senha123",
+          "cpf": "123.456.789-00",
+          "telefone": "(11) 99999-9999",
+          "veiculos": [
+            {
+              "placa": "ABC-1234",
+              "modelo": "Civic",
+              "marca": "Honda",
+              "ano": 2023
+            }
+          ]
+        }
+
+  - _id: req_logar
+    _type: request
+    parentId: fld_auth
+    name: 'POST - Logar'
+    method: POST
+    url: '{{ _.base_url }}/clientes/logar'
+    headers:
+      - name: Content-Type
+        value: application/json
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "email": "joao.silva@email.com",
+          "senha": "senha123"
+        }
+
+  # ==================== CLIENTE - GET ====================
+  - _id: req_cliente_findall
+    _type: request
+    parentId: fld_cliente
+    name: 'GET - Listar Todos Clientes'
+    method: GET
+    url: '{{ _.base_url }}/clientes/all'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+
+  - _id: req_cliente_findbyid
+    _type: request
+    parentId: fld_cliente
+    name: 'GET - Buscar Cliente por ID'
+    method: GET
+    url: '{{ _.base_url }}/clientes/1'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+
+  # ==================== CLIENTE - PUT ====================
+  - _id: req_cliente_update
+    _type: request
+    parentId: fld_cliente
+    name: 'PUT - Atualizar Cliente'
+    method: PUT
+    url: '{{ _.base_url }}/clientes/1'
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "João Silva Atualizado",
+          "email": "joao.atualizado@email.com",
+          "telefone": "(11) 88888-8888"
+        }
+
+  # ==================== CLIENTE - DELETE ====================
+  - _id: req_cliente_delete
+    _type: request
+    parentId: fld_cliente
+    name: 'DELETE - Deletar Cliente'
+    method: DELETE
+    url: '{{ _.base_url }}/clientes/1'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+
+  # ==================== VEÍCULO - GET ====================
+  - _id: req_veiculo_findall
+    _type: request
+    parentId: fld_veiculo
+    name: 'GET - Listar Todos Veículos'
+    method: GET
+    url: '{{ _.base_url }}/veiculos'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+
+  - _id: req_veiculo_findbyid
+    _type: request
+    parentId: fld_veiculo
+    name: 'GET - Buscar Veículo por ID'
+    method: GET
+    url: '{{ _.base_url }}/veiculos/1'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+
+  # ==================== VEÍCULO - POST ====================
+  - _id: req_veiculo_create
+    _type: request
+    parentId: fld_veiculo
+    name: 'POST - Criar Veículo'
+    method: POST
+    url: '{{ _.base_url }}/veiculos'
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "placa": "ABC-1234",
+          "modelo": "Civic",
+          "marca": "Honda",
+          "ano": 2023,
+          "cliente": {
+            "id": 1
+          }
+        }
+
+  # ==================== VEÍCULO - PUT ====================
+  - _id: req_veiculo_update
+    _type: request
+    parentId: fld_veiculo
+    name: 'PUT - Atualizar Veículo'
+    method: PUT
+    url: '{{ _.base_url }}/veiculos/1'
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "placa": "XYZ-9999",
+          "modelo": "Corolla",
+          "marca": "Toyota",
+          "ano": 2024,
+          "cliente": {
+            "id": 1
+          }
+        }
+
+  # ==================== VEÍCULO - DELETE ====================
+  - _id: req_veiculo_delete
+    _type: request
+    parentId: fld_veiculo
+    name: 'DELETE - Deletar Veículo'
+    method: DELETE
+    url: '{{ _.base_url }}/veiculos/1'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+
+  # ==================== APÓLICE - GET ====================
+  - _id: req_apolice_findall
+    _type: request
+    parentId: fld_apolice
+    name: 'GET - Listar Todas Apólices'
+    method: GET
+    url: '{{ _.base_url }}/apolice'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+
+  - _id: req_apolice_findbyid
+    _type: request
+    parentId: fld_apolice
+    name: 'GET - Buscar Apólice por ID'
+    method: GET
+    url: '{{ _.base_url }}/apolice/1'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+
+  # ==================== APÓLICE - POST ====================
+  - _id: req_apolice_create
+    _type: request
+    parentId: fld_apolice
+    name: 'POST - Criar Apólice'
+    method: POST
+    url: '{{ _.base_url }}/apolice'
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "numeroApolice": "APO-001",
+          "valor": 1500.00,
+          "dataInicio": "2024-01-01",
+          "dataFim": "2025-01-01",
+          "veiculo": {
+            "id": 1
+          },
+          "cliente": {
+            "id": 1
+          }
+        }
+
+  # ==================== APÓLICE - PUT ====================
+  - _id: req_apolice_update
+    _type: request
+    parentId: fld_apolice
+    name: 'PUT - Atualizar Apólice'
+    method: PUT
+    url: '{{ _.base_url }}/apolice/1'
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "numeroApolice": "APO-002",
+          "valor": 2000.00,
+          "dataInicio": "2024-06-01",
+          "dataFim": "2025-06-01",
+          "veiculo": {
+            "id": 1
+          },
+          "cliente": {
+            "id": 1
+          }
+        }
+
+  # ==================== APÓLICE - DELETE ====================
+  - _id: req_apolice_delete
+    _type: request
+    parentId: fld_apolice
+    name: 'DELETE - Deletar Apólice'
+    method: DELETE
+    url: '{{ _.base_url }}/apolice/1'
+    headers:
+      - name: Authorization
+        value: 'Bearer {{ _.token }}'
