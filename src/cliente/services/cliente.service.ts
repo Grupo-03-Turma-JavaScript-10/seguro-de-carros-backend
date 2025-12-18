@@ -1,7 +1,7 @@
+import { Cliente } from './../entities/cliente.entity';
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Cliente } from "../entities/cliente.entity";
 
 
 @Injectable()
@@ -48,5 +48,10 @@ export class ClienteService{
     async deleteCliente(id:number): Promise<void>{
         await this.findById(id);
         await this.clienteRepository.delete(id);
+    }
+    async findByemail(email:string):Promise<Cliente | null>{
+        return await this.clienteRepository.findOne({
+            where:{email:email},
+        })
     }
 }
