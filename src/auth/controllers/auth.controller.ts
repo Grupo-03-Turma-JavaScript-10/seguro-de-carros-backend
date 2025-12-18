@@ -4,11 +4,22 @@ import { AuthService } from '../services/auth.service';
 import { ClientLogin } from '../entities/clientlogin.entity';
 import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { ClienteResponse } from '../interfaces/cliente-response.interface';
+import { ClienteService } from '../../cliente/services/cliente.service';
+import { Cliente } from '../../cliente/entities/cliente.entity';
 
 @ApiTags('Autenticação')
 @Controller('/clientes')
 export class AuthController {
-  constructor(private authservice: AuthService){}
+  constructor(
+    private authservice: AuthService,
+    private clienteService: ClienteService,
+  ){}
+
+  @Post('/cadastrar')
+  @HttpCode(HttpStatus.CREATED)
+  async cadastrar(@Body() cliente: Cliente): Promise<Cliente> {
+    return this.clienteService.create(cliente);
+  }
 
   @UseGuards(LocalAuthGuard)
   @Post('/logar')
