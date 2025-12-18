@@ -74,12 +74,8 @@ export class ApoliceService {
 
     async findById(id:number): Promise<Apolice | null>{
       return await this.apoliceRepository.findOne({
-        where:{
-          id,
-        },
+        where:{id},
       });
 
-    }
-
-   
+    }   
 }

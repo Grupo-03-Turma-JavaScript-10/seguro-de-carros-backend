@@ -31,6 +31,7 @@ export class VeiculoService {
     async create(veiculo:Veiculo):Promise<Veiculo>{
         return await this.veiculoRepository.save(veiculo);
     }
+    
     async update(id:number,veiculoData:Partial<Veiculo>):Promise<Veiculo>{
       const veiculoExistente =   await this.findById(id);
       const veiculoAtualizado = {...veiculoExistente,...veiculoData}

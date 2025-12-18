@@ -23,13 +23,11 @@ export class ClienteController {
 
   @Put(':id')
   update(@Param('id') id: number, @Body() cliente: Cliente) {
-    return this.clienteService.update(id, cliente);
+    return this.clienteService.updateCliente(id, cliente);
   }
 
   @Delete(':id')
   delete(@Param('id') id: number) {
-    return this.clienteService.delete(id);
+    return this.clienteService.deleteCliente(id);
   }
 }
-
-export { Cliente };

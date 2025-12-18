@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Apolice } from '../../apolice/entities/apolice.entity';
+import { Cliente } from '../../cliente/entities/cliente.entity';
 
 @Entity({ name: 'tb_veiculos'})
  export class Veiculo{
@@ -21,6 +22,6 @@ import { Apolice } from '../../apolice/entities/apolice.entity';
     @OneToMany(()=>Apolice,apolice => apolice.veiculo)
     apolices:Apolice[];
 
-    
-
- }
+    @ManyToOne(() => Cliente,cliente => cliente.veiculos)
+    cliente: Cliente;
+}
