@@ -21,4 +21,6 @@ import { Apolice } from '../../apolice/entities/apolice.entity';
     @OneToMany(()=>Apolice,apolice => apolice.veiculo)
     apolices:Apolice[];
 
+    
+
  }

@@ -1,6 +1,7 @@
 import { Veiculo } from './../../veiculo/entities/veiculo.entity';
 import { IsNotEmpty } from "class-validator";
 import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Cliente } from '../../cliente/entities/cliente.entity';
 
 @Entity("tb_apolice")
 export class Apolice{
@@ -12,20 +13,24 @@ export class Apolice{
     numeroApolice: string;
 
     @IsNotEmpty()
-    @Column({nullable: false})
+    @Column({type:'decimal',precision:10,scale:2,nullable: false})
     valor: number;
 
     @IsNotEmpty()
-    @Column({nullable: false})
+    @Column({type:'date',nullable: false})
     dataInicio: Date;
 
     @IsNotEmpty()
-    @Column({nullable: false})
+    @Column({type:'date',nullable: false})
     dataFim: Date;
 
     @ManyToOne(()=>Veiculo,{eager:true})
     @JoinColumn({name:"VeiculoId"})
     veiculo:Veiculo;
+
+    @ManyToOne(()=>Cliente,cliente => cliente.apolices,{eager:true})
+    @JoinColumn({name:'ClienteId'})
+    cliente:Cliente;
 
 
     @BeforeInsert()
