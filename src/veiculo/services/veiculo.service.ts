@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Veiculo } from './../entities/veiculo.entity';
+import { Veiculo } from '../entities/veiculo.entity';
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { DeleteResult, Repository } from 'typeorm';
 import { Apolice } from '../../apolice/entities/apolice.entity';
