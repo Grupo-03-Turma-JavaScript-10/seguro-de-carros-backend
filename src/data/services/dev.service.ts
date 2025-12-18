@@ -12,7 +12,7 @@ export class DevService implements TypeOrmOptionsFactory {
             host: 'localhost',
             port: 3306,
             username: 'root',
-            password: 'root',
+            password: '1251',
             database: 'db_seguro_de_carros',
             entities: [Veiculo, Apolice],
             synchronize: true,

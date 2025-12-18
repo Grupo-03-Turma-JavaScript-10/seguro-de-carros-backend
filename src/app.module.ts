@@ -6,11 +6,12 @@ import { ConfigModule } from '@nestjs/config';
 import { DevService } from './data/services/dev.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApoliceModule } from './apolice/apolice.module';
+import { ClienteModule } from './cliente/cliente.module';
 
 @Module({
   imports: [TypeOrmModule.forRootAsync({
     useClass: DevService, imports: [ConfigModule],
-  }), VeiculoModule, ApoliceModule],
+  }), VeiculoModule, ApoliceModule, ClienteModule],
   controllers: [AppController],
   providers: [AppService],
 })
