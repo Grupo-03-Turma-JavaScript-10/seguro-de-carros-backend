@@ -26,12 +26,12 @@ export class Apolice {
   dataFim: Date;
 
   @ApiProperty({ type: () => Veiculo })
-  @ManyToOne(() => Veiculo, veiculo => veiculo.apolices)
+  @ManyToOne(() => Veiculo, veiculo => veiculo.apolices, { onDelete: 'CASCADE' })
   @JoinColumn({ name: "VeiculoId" })
   veiculo: Veiculo;
 
   @ApiProperty({ type: () => Cliente })
-  @ManyToOne(() => Cliente, cliente => cliente.apolices)
+  @ManyToOne(() => Cliente, cliente => cliente.apolices, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'ClienteId' })
   cliente: Cliente;
 }

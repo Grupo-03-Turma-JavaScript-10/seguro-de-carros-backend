@@ -31,6 +31,6 @@ export class Veiculo {
   apolices: Apolice[];
 
   @ApiProperty({ type: () => Cliente })
-  @ManyToOne(() => Cliente, cliente => cliente.veiculos)
+  @ManyToOne(() => Cliente, cliente => cliente.veiculos, { onDelete: 'CASCADE' })
   cliente: Cliente;
 }
