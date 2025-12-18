@@ -21,4 +21,6 @@ export class Apolice{
     @IsNotEmpty()
     @Column({nullable: false})
     dataFim: Date;
+
+    veiculo: number;
 }

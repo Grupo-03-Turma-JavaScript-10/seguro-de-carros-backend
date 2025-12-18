@@ -1,13 +1,16 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Apolice } from "./entities/apolice.entity";
+import { ApoliceService } from "./services/apolice.service";
+import { ApoliceController } from "./controllers/apolice.controller";
+import { Veiculo } from "../veiculo/entities/veiculo.entity";
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Apolice])],
-    controllers: [],
-    providers: [],
-    exports: []
+    imports: [TypeOrmModule.forFeature([Apolice, Veiculo])],
+    controllers: [ApoliceController],
+    providers: [ApoliceService],
+    exports: [ApoliceService]
 })
 
 export class ApoliceModule{} 
