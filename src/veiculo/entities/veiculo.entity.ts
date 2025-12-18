@@ -1,27 +1,36 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Apolice } from '../../apolice/entities/apolice.entity';
 import { Cliente } from '../../cliente/entities/cliente.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'tb_veiculos'})
- export class Veiculo{
-    @PrimaryGeneratedColumn()
-    id:number;
+export class Veiculo {
 
-    @Column({length:255,nullable:false})
-    placa:string;
+  @ApiProperty()
+  @PrimaryGeneratedColumn()
+  id: number;
+  
+  @ApiProperty()
+  @Column({ length: 255, nullable: false })
+  placa: string;
+  
+  @ApiProperty()
+  @Column({ length: 255, nullable: false })
+  modelo: string;
+  
+  @ApiProperty()
+  @Column({ length: 255, nullable: false })
+  marca: string;
 
-    @Column({length:255,nullable:false})
-    modelo:string;
+  @ApiProperty()
+  @Column({ type: 'int', nullable: false })
+  ano: number;
 
-    @Column({length:255,nullable:false})
-    marca:string;
+  @ApiProperty({ type: () => [Apolice] })
+  @OneToMany(() => Apolice, apolice => apolice.veiculo)
+  apolices: Apolice[];
 
-    @Column({type:'int',nullable:false})
-    ano:number;
-
-    @OneToMany(()=>Apolice,apolice => apolice.veiculo)
-    apolices:Apolice[];
-
-    @ManyToOne(() => Cliente,cliente => cliente.veiculos)
-    cliente: Cliente;
+  @ApiProperty({ type: () => Cliente })
+  @ManyToOne(() => Cliente, cliente => cliente.veiculos)
+  cliente: Cliente;
 }

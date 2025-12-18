@@ -1,42 +1,39 @@
-import { IsEmail,IsNotEmpty, MinLength, } from "class-validator";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Apolice } from "../../apolice/entities/apolice.entity";
 import { Veiculo } from "../../veiculo/entities/veiculo.entity";
+import { ApiProperty } from '@nestjs/swagger';
 
-@Entity({name:'tb_cliente'})
-export class Cliente{
+@Entity({ name: 'tb_cliente' })
+export class Cliente {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
-  
-  @IsNotEmpty()
-  @Column({length:255,nullable:false})
-  nome:string;
 
-  @IsNotEmpty()
-  @IsEmail()
-  @Column({unique:true})
-  email:string;
+  @ApiProperty()
+  @Column({ length: 255, nullable: false })
+  nome: string;
 
+  @ApiProperty()
+  @Column({ unique: true })
+  email: string;
 
-  @MinLength(8)
-  @IsNotEmpty()
-  @Column({length:255,nullable:false})
+  @ApiProperty()
+  @Column({ length: 255, nullable: false })
   senha: string;
-  
-  @IsNotEmpty()
-  @Column({length:14,unique:true,nullable:false})
-  cpf:string;
-  
-  @IsNotEmpty()
-  @Column({length:20,nullable:false})
-  telefone:string;
 
-  @IsNotEmpty()
+  @ApiProperty()
+  @Column({ length: 14, unique: true, nullable: false })
+  cpf: string;
+
+  @ApiProperty()
+  @Column({ length: 20, nullable: false })
+  telefone: string;
+
+  @ApiProperty({ type: () => [Apolice] })
   @OneToMany(() => Apolice, apolice => apolice.cliente)
-   apolices: Apolice[];
+  apolices: Apolice[];
 
-  @IsNotEmpty()
+  @ApiProperty({ type: () => [Veiculo] })
   @OneToMany(() => Veiculo, veiculo => veiculo.cliente)
   veiculos: Veiculo[];
-
 }

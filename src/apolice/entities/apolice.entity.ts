@@ -1,41 +1,37 @@
-import { Veiculo } from './../../veiculo/entities/veiculo.entity';
-import { IsNotEmpty } from "class-validator";
-import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Veiculo } from '../../veiculo/entities/veiculo.entity';
 import { Cliente } from '../../cliente/entities/cliente.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity("tb_apolice")
-export class Apolice{
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Apolice {
+  @ApiProperty()
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @IsNotEmpty()
-    @Column({length: 10, nullable: false})
-    numeroApolice: string;
+  @ApiProperty()
+  @Column({ length: 10, nullable: false })
+  numeroApolice: string;
 
-    @IsNotEmpty()
-    @Column({type:'decimal',precision:10,scale:2,nullable: false})
-    valor: number;
+  @ApiProperty()
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
+  valor: number;
 
-    @IsNotEmpty()
-    @Column({type:'date',nullable: false})
-    dataInicio: Date;
+  @ApiProperty({ required: false })
+  @Column({ type: 'date', nullable: true })
+  dataInicio: Date;
 
-    @IsNotEmpty()
-    @Column({type:'date',nullable: false})
-    dataFim: Date;
+  @ApiProperty({ required: false })
+  @Column({ type: 'date', nullable: true })
+  dataFim: Date;
 
-    @ManyToOne(()=>Veiculo,{eager:true})
-    @JoinColumn({name:"VeiculoId"})
-    veiculo:Veiculo;
+  @ApiProperty({ type: () => Veiculo })
+  @ManyToOne(() => Veiculo, veiculo => veiculo.apolices)
+  @JoinColumn({ name: "VeiculoId" })
+  veiculo: Veiculo;
 
-    @ManyToOne(()=>Cliente,cliente => cliente.apolices,{eager:true})
-    @JoinColumn({name:'ClienteId'})
-    cliente:Cliente;
-
-
-    @BeforeInsert()
-    gerarNumero(){
-        this.numeroApolice =
-          Math.floor(1000000000 + Math.random() * 9000000000).toString();
-    }
+  @ApiProperty({ type: () => Cliente })
+  @ManyToOne(() => Cliente, cliente => cliente.apolices)
+  @JoinColumn({ name: 'ClienteId' })
+  cliente: Cliente;
 }

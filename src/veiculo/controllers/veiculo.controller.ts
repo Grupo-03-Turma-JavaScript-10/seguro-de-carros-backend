@@ -1,8 +1,13 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
 import { VeiculoService } from "../services/veiculo.service";
 import { Veiculo } from "../entities/veiculo.entity";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
 
+@ApiTags('veiculo')
 @Controller("/veiculos")
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class VeiculoController {
     constructor(private readonly veiculoService: VeiculoService) { }
 

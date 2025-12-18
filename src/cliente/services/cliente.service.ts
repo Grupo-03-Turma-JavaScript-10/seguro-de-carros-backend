@@ -1,5 +1,6 @@
+import { Bcrpyt } from './../../auth/bcrypt/bcrypt';
 import { Cliente } from './../entities/cliente.entity';
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
@@ -8,7 +9,8 @@ import { Repository } from "typeorm";
 export class ClienteService{
     constructor(
         @InjectRepository(Cliente)
-        private clienteRepository:Repository<Cliente>
+        private clienteRepository:Repository<Cliente>,
+        private bcrpyt: Bcrpyt,
     ){}
 
     async findAll(): Promise<Cliente[]>{
@@ -35,7 +37,14 @@ export class ClienteService{
     }
 
     async create(cliente:Cliente):Promise<Cliente>{
-        return await this.clienteRepository.save(cliente)
+      const existente =  await this.clienteRepository.findOne(
+        {where:[{email:cliente.email},{cpf:cliente.cpf}]}
+      );
+      if(existente){
+        throw new HttpException('O usuario ja existe!',HttpStatus.BAD_REQUEST);
+      }
+           cliente.senha = await this.bcrpyt.criptografarSenha(cliente.senha)
+           return await this.clienteRepository.save(cliente)
     }
 
     async updateCliente(id: number, clienteData: Partial<Cliente>): Promise<Cliente> {
@@ -52,6 +61,10 @@ export class ClienteService{
     async findByemail(email:string):Promise<Cliente | null>{
         return await this.clienteRepository.findOne({
             where:{email:email},
+            relations:{
+                veiculos:true,
+                apolices:true
+            }
         })
     }
 }

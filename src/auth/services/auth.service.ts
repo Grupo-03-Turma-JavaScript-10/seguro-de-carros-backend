@@ -4,6 +4,8 @@ import { JwtService } from "@nestjs/jwt";
 import { Bcrpyt } from "../bcrypt/bcrypt";
 import { ClienteSemSenha } from "../interfaces/cliente-sem-senha.interface";
 import { ClientLogin } from "../entities/clientlogin.entity";
+import { ClienteResponse } from "../interfaces/cliente-response.interface";
+
 @Injectable()
 export class AuthService{
     constructor(
@@ -27,21 +29,12 @@ export class AuthService{
         return resposta;
     }
 
-    async login (usuarioLogin: ClientLogin ) {
-        const payload = {sub: usuarioLogin.usuario};
-        const buscarUsuario = await this.ClienteService.findByemail(usuarioLogin.usuario);
-        if(!buscarUsuario){
-            throw new HttpException('Usuario não encontrado!',HttpStatus.NOT_FOUND)
-        }
+    async login(usuario: ClienteSemSenha): Promise<ClienteResponse> {
+        const payload = { sub: usuario.email };
+        
         return {
-            id: buscarUsuario?.id,
-            nome: buscarUsuario?.nome,
-            telefone: buscarUsuario?.telefone,
-            email: buscarUsuario?.email,
-            cpf: buscarUsuario?.cpf,
-            apolices:buscarUsuario?.apolices,
-            veiculos:buscarUsuario?.veiculos,
-            token: `Bearer ${this.jwtService.sign(payload)}`,
-        }
+            ...usuario,
+            token: this.jwtService.sign(payload)
+        };
     }
 }

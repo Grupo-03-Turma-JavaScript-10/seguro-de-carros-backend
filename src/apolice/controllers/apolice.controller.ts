@@ -1,19 +1,26 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
 import { ApoliceService } from "../services/apolice.service";
 import { Apolice } from "../entities/apolice.entity";
-import { Veiculo } from "../../veiculo/entities/veiculo.entity";
 import { DeleteResult } from "typeorm";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
 
+@ApiTags('Apolice')
 @Controller("/apolice")
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class ApoliceController{
     constructor(private readonly apoliceService: ApoliceService){
     }
-
+    
+    
     @Get()
-    findAll(){
+    @HttpCode(HttpStatus.OK)
+    findAll():Promise <Apolice[]> {
         return this.apoliceService.findAll();
     }
-
+    
+    
     @Get('/:id')
     @HttpCode(HttpStatus.OK)
     findById(@Param('id',ParseIntPipe)id:number):Promise<Apolice | null > {
@@ -23,7 +30,7 @@ export class ApoliceController{
     @Post()
     @HttpCode(HttpStatus.CREATED)
     create(@Body() apolice:Apolice):Promise<Apolice>{
-        return this.apoliceService.criarApolice(apolice);
+        return this.apoliceService.create(apolice);
     }
 
     @Put('/:id')
