@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { DeleteResult, ILike, Repository } from 'typeorm';
 import { Apolice } from '../entities/apolice.entity';
 import { Veiculo } from '../../veiculo/entities/veiculo.entity';
 
@@ -26,13 +26,13 @@ export class ApoliceService {
     async criarApolice(apolice: Apolice): Promise<Apolice> {
     
       const veiculo = await this.veiculoRepository.findOne({
-        where: { id: apolice.veiculo }
+        where: { id: apolice.veiculo.id }
     });
     
     if (!veiculo) {
         throw new NotFoundException('Veículo não encontrado!');
     }
-    
+    apolice.veiculo = veiculo;
     apolice.valor = await this.calcularApolice(apolice.valor, veiculo);
     return this.apoliceRepository.save(apolice);
 }
@@ -63,11 +63,23 @@ export class ApoliceService {
       });
     }
 
-    async deleteApolice(id: number): Promise<void>{
-      await this.apoliceRepository.delete(id);
+    async deleteApolice(id: number): Promise<DeleteResult>{
+      await this.findById(id)
+      return this.apoliceRepository.delete(id);
     }
 
     async findAll(): Promise<Apolice[]> {
       return await this.apoliceRepository.find();
     }
+
+    async findById(id:number): Promise<Apolice | null>{
+      return await this.apoliceRepository.findOne({
+        where:{
+          id,
+        },
+      });
+
+    }
+
+   
 }

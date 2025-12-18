@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Apolice } from '../../apolice/entities/apolice.entity';
 
 @Entity({ name: 'tb_veiculos'})
  export class Veiculo{
@@ -16,5 +17,8 @@ import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeor
 
     @Column({type:'int',nullable:false})
     ano:number;
+
+    @OneToMany(()=>Apolice,apolice => apolice.veiculo)
+    apolices:Apolice[];
 
  }

@@ -24,10 +24,10 @@ export class VeiculoController {
         return this.veiculoService.create(veiculo);
     }
 
-    @Put()
+    @Put('/:id')
     @HttpCode(HttpStatus.OK)
-    update(@Body() veiculo: Veiculo): Promise<Veiculo> {
-        return this.veiculoService.update(veiculo);
+    update(@Param('id',ParseIntPipe)id:number,@Body() veiculo: Veiculo): Promise<Veiculo> {
+        return this.veiculoService.update(id,veiculo);
     }
 
     @Delete('/:id')

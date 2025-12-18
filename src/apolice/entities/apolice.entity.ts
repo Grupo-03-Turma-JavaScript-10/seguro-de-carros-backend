@@ -1,5 +1,6 @@
+import { Veiculo } from './../../veiculo/entities/veiculo.entity';
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("tb_apolice")
 export class Apolice{
@@ -22,5 +23,14 @@ export class Apolice{
     @Column({nullable: false})
     dataFim: Date;
 
-    veiculo: number;
+    @ManyToOne(()=>Veiculo,{eager:true})
+    @JoinColumn({name:"VeiculoId"})
+    veiculo:Veiculo;
+
+
+    @BeforeInsert()
+    gerarNumero(){
+        this.numeroApolice =
+          Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    }
 }

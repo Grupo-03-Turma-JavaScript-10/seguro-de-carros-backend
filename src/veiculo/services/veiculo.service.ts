@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Veiculo } from './../entities/veiculo.entity';
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { DeleteResult, Repository } from 'typeorm';
 import { Apolice } from '../../apolice/entities/apolice.entity';
 
@@ -23,8 +23,7 @@ export class VeiculoService {
             }
         })
         if(!veiculo){
-            throw new HttpException('ID não encontrado!',HttpStatus.NOT_FOUND);
-
+            throw new NotFoundException(`Veiculo com o ID ${id}não encontrado`)
         }
         return veiculo;
     }
@@ -32,17 +31,16 @@ export class VeiculoService {
     async create(veiculo:Veiculo):Promise<Veiculo>{
         return await this.veiculoRepository.save(veiculo);
     }
-    async update(veiculo:Veiculo):Promise<Veiculo>{
-        await this.findById(veiculo.id);
-
-
-        return await this.veiculoRepository.save(veiculo);
+    async update(id:number,veiculoData:Partial<Veiculo>):Promise<Veiculo>{
+      const veiculoExistente =   await this.findById(id);
+      const veiculoAtualizado = {...veiculoExistente,...veiculoData}
+        return await this.veiculoRepository.save(veiculoAtualizado);
     }
 
-    async delete(id:number):Promise<DeleteResult>{
+    async delete(id:number):Promise<void>{
         await this.findById(id);
 
-        return await this.veiculoRepository.delete(id);
+        await this.veiculoRepository.delete(id);
     }
 
 }
