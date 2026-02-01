@@ -3,6 +3,12 @@ import { Veiculo } from '../../veiculo/entities/veiculo.entity';
 import { Cliente } from '../../cliente/entities/cliente.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
+export enum TipoSeguro {
+  BASICO = 'BASICO',
+  COMPLETO = 'COMPLETO',
+  PREMIUM = 'PREMIUM',
+}
+
 @Entity("tb_apolice")
 export class Apolice {
   @ApiProperty()
@@ -24,6 +30,10 @@ export class Apolice {
   @ApiProperty({ required: false })
   @Column({ type: 'date', nullable: true })
   dataFim: Date;
+
+  @ApiProperty({ enum: TipoSeguro, required: false })
+  @Column({ type: 'enum', enum: TipoSeguro, nullable: true })
+  tipoSeguro: TipoSeguro;
 
   @ApiProperty({ type: () => Veiculo })
   @ManyToOne(() => Veiculo, veiculo => veiculo.apolices, { onDelete: 'CASCADE' })
