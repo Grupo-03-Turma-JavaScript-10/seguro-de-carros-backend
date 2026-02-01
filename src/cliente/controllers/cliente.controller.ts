@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Put, UseGuards, Request } from '@nestjs/common';
 import { ClienteService } from '../services/cliente.service';
 import { Cliente } from '../entities/cliente.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -14,6 +14,12 @@ export class ClienteController {
   @HttpCode(HttpStatus.OK)
   findAll():Promise<Cliente[]> {
     return this.clienteService.findAll();
+  }
+
+  @Get('/me')
+  @HttpCode(HttpStatus.OK)
+  getMe(@Request() req: any):Promise<Cliente> {
+    return this.clienteService.findById(req.user.id);
   }
 
   @Get(':id')
