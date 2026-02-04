@@ -19,7 +19,7 @@ export class ClienteController {
   @Get('/me')
   @HttpCode(HttpStatus.OK)
   getMe(@Request() req: any):Promise<Cliente> {
-    return this.clienteService.findById(req.user.id);
+    return this.clienteService.findById(req.user.sub);
   }
 
   @Get(':id')

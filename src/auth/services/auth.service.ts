@@ -30,7 +30,7 @@ export class AuthService{
     }
 
     async login(usuario: ClienteSemSenha): Promise<ClienteResponse> {
-        const payload = { sub: usuario.email };
+        const payload = { sub: usuario.id, email: usuario.email };
         
         return {
             ...usuario,
